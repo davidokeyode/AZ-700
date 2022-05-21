@@ -152,7 +152,7 @@
               "name": "ipconfig1",
               "properties": {
                 "subnet": {
-                  "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('Vnet-1-Name'), variables('EngSubnet1Name'))]"
+                  "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('Vnet-2-Name'), variables('EngSubnet1Name'))]"
                 },
                 "privateIPAllocationMethod": "Dynamic"
               }
@@ -160,7 +160,7 @@
           ]
         },
         "dependsOn": [
-          "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('Vnet-1-Name'), variables('EngSubnet1Name'))]"
+          "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('Vnet-2-Name'), variables('EngSubnet1Name'))]"
         ]
       },
       {
