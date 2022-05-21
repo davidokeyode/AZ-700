@@ -138,7 +138,7 @@
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('Vnet-1-Name'), variables('dataSubnetName'))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-1-Name'))]"
       ]
     },
     {
@@ -160,7 +160,7 @@
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('Vnet-2-Name'), variables('EngSubnet1Name'))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-2-Name'))]"
       ]
     },
     {
