@@ -86,18 +86,7 @@
       "DataVmNic": "[format('{0}NetInt', parameters('dataVmName'))]",
       "EngVmNic": "[format('{0}NetInt', parameters('EngVmName'))]",
       "webNSG": "WebVmNsg",
-      "osDiskType": "Standard_LRS",
-      "linuxConfiguration": {
-        "disablePasswordAuthentication": true,
-        "ssh": {
-          "publicKeys": [
-            {
-              "path": "[format('/home/{0}/.ssh/authorized_keys', parameters('adminUsername'))]",
-              "keyData": "[parameters('adminPassword')]"
-            }
-          ]
-        }
-      }
+      "osDiskType": "Standard_LRS"
     },
     "resources": [
       {
@@ -338,8 +327,7 @@
           "osProfile": {
             "computerName": "[parameters('WebVmName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]",
-            "linuxConfiguration": "[if(equals(variables('authenticationType'), 'password'), null(), variables('linuxConfiguration'))]"
+            "adminPassword": "[parameters('adminPassword')]"
           }
         },
         "dependsOn": [
@@ -379,8 +367,7 @@
           "osProfile": {
             "computerName": "[parameters('DataVmName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]",
-            "linuxConfiguration": "[if(equals(variables('authenticationType'), 'password'), null(), variables('linuxConfiguration'))]"
+            "adminPassword": "[parameters('adminPassword')]"
           }
         },
         "dependsOn": [
@@ -420,8 +407,7 @@
           "osProfile": {
             "computerName": "[parameters('EngVmName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]",
-            "linuxConfiguration": "[if(equals(variables('authenticationType'), 'password'), null(), variables('linuxConfiguration'))]"
+            "adminPassword": "[parameters('adminPassword')]"
           }
         },
         "dependsOn": [
