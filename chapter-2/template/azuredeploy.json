@@ -199,7 +199,7 @@
         },
         "subnets": [
           {
-            "name": "[format('{0}/{1}', variables('Vnet-1-Name'), variables('SharedSvcSubnetName'))]",
+            "name": "[variables('SharedSvcSubnetName')]",
             "properties": {
               "addressPrefix": "[variables('SharedSvcSubnetAddressPrefix')]",
               "privateEndpointNetworkPolicies": "Enabled",
@@ -207,7 +207,7 @@
             }
           },
           {
-            "name": "[format('{0}/{1}', variables('Vnet-1-Name'), variables('dataSubnetName'))]",
+            "name": "[variables('dataSubnetName')]",
             "properties": {
               "addressPrefix": "[variables('DataSubnetAddressPrefix')]",
               "privateEndpointNetworkPolicies": "Enabled",
@@ -215,7 +215,7 @@
             }
           },
           {
-            "name": "[format('{0}/{1}', variables('Vnet-1-Name'), variables('WebSubnetName'))]",
+            "name": "[variables('WebSubnetName')]",
             "properties": {
               "addressPrefix": "[variables('WebSubnetAddressPrefix')]",
               "privateEndpointNetworkPolicies": "Enabled",
@@ -238,7 +238,7 @@
         },
         "subnets": [
           {
-            "name": "[format('{0}/{1}', variables('Vnet-2-Name'), variables('EngSubnet1Name'))]",
+            "name": "[variables('EngSubnet1Name')]",
             "properties": {
               "addressPrefix": "[variables('EngSubnet1AddressPrefix')]",
               "privateEndpointNetworkPolicies": "Enabled",
@@ -246,7 +246,7 @@
             }
           },
           {
-            "name": "[format('{0}/{1}', variables('Vnet-2-Name'), variables('EngSubnet2Name'))]",
+            "name": "[variables('EngSubnet2Name')]",
             "properties": {
               "addressPrefix": "[variables('EngSubnet2AddressPrefix')]",
               "privateEndpointNetworkPolicies": "Enabled",
