@@ -20,7 +20,14 @@
       "type": "string",
       "defaultValue": "engvm",
       "metadata": {
-        "description": "The name of the eng virtual machine."
+        "description": "The name of the engineering virtual machine."
+      }
+    },
+    "DnsVmName": {
+      "type": "string",
+      "defaultValue": "dnsvm",
+      "metadata": {
+        "description": "The name of the DNS virtual machine."
       }
     },
     "adminUsername": {
@@ -62,11 +69,23 @@
       "metadata": {
         "description": "The size of the VM"
       }
+    },
+    "firstVnetLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location to deploy the CoreServices VNet into"
+      }
+    },
+    "secondVnetLocation": {
+      "type": "string",
+      "defaultValue": "West Europe",
+      "metadata": {
+        "description": "Location to deploy the Engineering VNet into"
+      }
     }
   },
   "variables": {
-    "location": "[resourceGroup().location]",
-    "authenticationType": "password",
     "Vnet-1-Name": "CoreServicesVnet",
     "Vnet-2-Name": "EngineeringVnet",
     "SharedSvcSubnetName": "SharedServicesSubnet",
@@ -84,6 +103,7 @@
     "WebVmPip": "[format('{0}PublicIP', parameters('WebVmName'))]",
     "WebVmNic": "[format('{0}NetInt', parameters('WebVmName'))]",
     "DataVmNic": "[format('{0}NetInt', parameters('dataVmName'))]",
+    "DnsVmNic": "[format('{0}NetInt', parameters('DnsVmName'))]",
     "EngVmNic": "[format('{0}NetInt', parameters('EngVmName'))]",
     "webNSG": "WebVmNsg",
     "osDiskType": "Standard_LRS"
@@ -93,7 +113,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2021-05-01",
       "name": "[variables('WebVmNic')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -122,8 +142,30 @@
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2021-05-01",
+      "name": "[variables('DnsVmNic')]",
+      "location": "[parameters('firstVnetLocation')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('Vnet-1-Name'), variables('SharedSvcSubnetName'))]"
+              },
+              "privateIPAllocationMethod": "Dynamic"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-1-Name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2021-05-01",
       "name": "[variables('DataVmNic')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -145,7 +187,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2021-05-01",
       "name": "[variables('EngVmNic')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('secondVnetLocation')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -167,7 +209,7 @@
       "type": "Microsoft.Network/networkSecurityGroups",
       "apiVersion": "2021-05-01",
       "name": "[variables('webNSG')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "securityRules": [
           {
@@ -190,7 +232,7 @@
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2021-05-01",
       "name": "[variables('Vnet-1-Name')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -229,7 +271,7 @@
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2021-05-01",
       "name": "[variables('Vnet-2-Name')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('secondVnetLocation')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -260,7 +302,7 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-05-01",
       "name": "[variables('WebVmPip')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('firstVnetLocation')]",
       "sku": {
         "name": "Basic"
       },
@@ -277,7 +319,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2021-11-01",
       "name": "[parameters('WebVmName')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
@@ -317,7 +359,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2021-11-01",
       "name": "[parameters('DataVmName')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
@@ -357,7 +399,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2021-11-01",
       "name": "[parameters('EngVmName')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('secondVnetLocation')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
@@ -391,6 +433,46 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', variables('EngVmNic'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[parameters('DnsVmName')]",
+      "location": "[parameters('firstVnetLocation')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "[variables('osDiskType')]"
+            }
+          },
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "[parameters('ubuntuOSVersion')]",
+            "version": "latest"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('DnsVmNic'))]"
+            }
+          ]
+        },
+        "osProfile": {
+          "computerName": "[parameters('DnsVmName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('DnsVmNic'))]"
       ]
     },
     {
