@@ -1,5 +1,5 @@
 #!/bin/bash
-apt-get -y update
+apt update -y 
 
 # install and configure bind9 dns service
 apt install bind9 -y
