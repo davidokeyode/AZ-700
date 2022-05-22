@@ -1,5 +1,6 @@
 ;
 ; BIND data file for local loopback interface
+; BIND data file for local the internal.charistech.xyz zone
 ;
 $TTL    604800
 @       IN      SOA     internal.charistech.xyz. root.internal.charistech.xyz. (
