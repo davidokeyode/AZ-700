@@ -79,7 +79,33 @@
     },
     "secondVnetLocation": {
       "type": "string",
-      "defaultValue": "West Europe",
+      "defaultValue": "West US",
+      "allowedValues": [
+        "East US",
+        "East US 2",
+        "South Central US",
+        "Central US",
+        "West US",
+        "Australia East",
+        "Southeast Asia",
+        "North Europe",
+        "West Europe",
+        "UK South",
+        "UK West",
+        "South Central US",
+        "South Africa North",
+        "Central India",
+        "East Asia",
+        "Japan East",
+        "Korea South",
+        "South India",
+        "West India",
+        "France South",
+        "Germany North",
+        "Central India",
+        "Norway West",
+        "UAE Central"
+      ],
       "metadata": {
         "description": "Location to deploy the Engineering VNet into"
       }
@@ -480,7 +506,7 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat('azseclinvm','/bind9config')]",
+      "name": "[concat(parameters('DnsVmName'),'/bind9config')]",
       "apiVersion": "2020-06-01",
       "location": "[parameters('firstVnetLocation')]",
       "dependsOn": [
