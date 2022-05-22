@@ -106,7 +106,10 @@
     "DnsVmNic": "[format('{0}NetInt', parameters('DnsVmName'))]",
     "EngVmNic": "[format('{0}NetInt', parameters('EngVmName'))]",
     "webNSG": "WebVmNsg",
-    "osDiskType": "Standard_LRS"
+    "osDiskType": "Standard_LRS",
+    "_artifactsLocation": "[deployment().properties.templateLink.uri]",
+    "_artifactsLocationSasToken": "",
+    "scriptUrl": "[uri(variables('_artifactsLocation'),concat('installscript.ps1',variables('_artifactsLocationSasToken')))]"
   },
   "resources": [
     {
@@ -474,6 +477,27 @@
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', variables('DnsVmNic'))]"
       ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat('azseclinvm','/bind9config')]",
+      "apiVersion": "2020-06-01",
+      "location": "[parameters('firstVnetLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines/', parameters('DnsVmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[uri(variables('_artifactsLocation'), concat('bind9config.sh', variables('_artifactsLocationSasToken')))]"
+          ],
+          "commandToExecute": "sh bind9config.sh"
+        }
+      }
     },
     {
       "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
