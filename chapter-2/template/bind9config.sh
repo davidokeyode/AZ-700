@@ -1,7 +1,8 @@
 #!/bin/bash
-apt update -y 
+apt update -y
 
 # install and configure bind9 dns service
+sleep 60
 apt install bind9 -y
 systemctl restart bind9.service
 
