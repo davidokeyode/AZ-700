@@ -1,3 +1,8 @@
+acl goodclients {
+        10.0.0.0/8;
+        localhost;
+        localnets;
+};
 options {
         directory "/var/cache/bind";
 
@@ -9,6 +14,9 @@ options {
         // nameservers, you probably want to use them as forwarders.  
         // Uncomment the following block, and insert the addresses replacing 
         // the all-0's placeholder.
+
+        recursion yes;
+        allow-query { goodclients; };
 
         forwarders {
               168.63.129.16;
