@@ -524,6 +524,42 @@
           "commandToExecute": "sh nvaconfig.sh"
         }
       }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2020-05-01",
+      "name": "[format('{0}/{1}', variables('Vnet-1-Name'), format('{0}-{1}', variables('Vnet-1-Name'), variables('Vnet-2-Name')))]",
+      "properties": {
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": false,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false,
+        "remoteVirtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-2-Name'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-1-Name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-2-Name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2020-05-01",
+      "name": "[format('{0}/{1}', variables('Vnet-2-Name'), format('{0}-{1}', variables('Vnet-2-Name'), variables('Vnet-1-Name')))]",
+      "properties": {
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": false,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false,
+        "remoteVirtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-1-Name'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-1-Name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('Vnet-2-Name'))]"
+      ]
     }
   ],
   "outputs": {
