@@ -59,9 +59,16 @@ echo 'babeld=no' >> /etc/quagga/daemons
 echo "add zebra config"
 cat <<EOF > /etc/quagga/zebra.conf
 !
+hostname nvavm
+password zebra
+enable password zebra
+!
 interface eth0
 !
 interface lo
+!
+ip route 10.10.2.0/24 10.10.11.1
+ip route 10.20.0.0/16 10.10.11.1
 !
 ip forwarding
 !
