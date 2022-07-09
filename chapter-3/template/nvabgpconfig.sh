@@ -8,7 +8,7 @@
 ## routeserver_IP1: first IP address of the router server 
 ## routeserver_IP2: second IP address of the router server
 
-asn_quagga=65001
+asn_quagga=65501
 bgp_routerId=10.10.11.4
 bgp_network1=10.100.1.0/24
 bgp_network2=10.100.2.0/24
