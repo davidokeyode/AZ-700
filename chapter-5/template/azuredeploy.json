@@ -18,7 +18,7 @@
     },
     "RemotePcName": {
       "type": "string",
-      "defaultValue": "userpcvm",
+      "defaultValue": "remotepc",
       "metadata": {
         "description": "The name of the remote user PC"
       }
@@ -63,7 +63,7 @@
         "description": "The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version."
       }
     },
-    "windowsOSVersion": {
+    "RemotePcOSVersion": {
       "type": "string",
       "defaultValue": "2019-Datacenter",
       "allowedValues": [
@@ -458,7 +458,7 @@
         "osProfile": {
           "computerName": "[parameters('OnPremVmName')]",
           "adminUsername": "[parameters('onpremUsername')]",
-          "Password": "[parameters('Password')]"
+          "adminPassword": "[parameters('Password')]"
         }
       },
       "dependsOn": [
@@ -498,7 +498,7 @@
         "osProfile": {
           "computerName": "[parameters('DataVmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "Password": "[parameters('Password')]"
+          "adminPassword": "[parameters('Password')]"
         }
       },
       "dependsOn": [
@@ -524,7 +524,7 @@
           "imageReference": {
             "publisher": "MicrosoftWindowsServer",
             "offer": "WindowsServer",
-            "sku": "[parameters('windowsOSVersion')]",
+            "sku": "[parameters('RemotePcOSVersion')]",
             "version": "latest"
           }
         },
@@ -538,7 +538,7 @@
         "osProfile": {
           "computerName": "[parameters('RemotePcName')]",
           "adminUsername": "[parameters('remoteUsername')]",
-          "Password": "[parameters('Password')]"
+          "adminPassword": "[parameters('Password')]"
         }
       },
       "dependsOn": [
