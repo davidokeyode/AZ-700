@@ -623,11 +623,11 @@
       "type": "string",
       "value": "[parameters('remoteUsername')]"
     },
-    "RemotePC": {
+    "RemotePC-FQDN": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('RemotePcPip'))).dnsSettings.fqdn]"
     },
-    "OnPremVPNDevice-PublicIP": {
+    "OnPremVPNDevice-FQDN": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('OnPremGatewayPip'))).dnsSettings.fqdn]"
     },
