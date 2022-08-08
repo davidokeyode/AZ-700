@@ -545,6 +545,26 @@
       ]
     },
     {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "MyCustomScriptExtension",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('secondVnetLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('RemotePcName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.4",
+        "settings": {
+          "fileUris": [
+            "[uri(variables('_artifactsLocation'), concat('vpncert.ps1', variables('_artifactsLocationSasToken')))]"
+          ],
+          "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File vpncert.ps1"
+        }
+      }
+    },
+    {
       "apiVersion": "2020-11-01",
       "type": "Microsoft.Network/virtualNetworkGateways",
       "name": "[variables('OnPremGatewayName')]",
@@ -586,7 +606,7 @@
       "comments": "local network gateway in Gateway1 to connect to the remote gateway1-public IP1",
       "type": "Microsoft.Network/localNetworkGateways",
       "apiVersion": "2020-08-01",
-      "name": "[variables('AzureLocalNetworkGateway')]", 
+      "name": "[variables('AzureLocalNetworkGateway')]",
       "location": "[parameters('secondVnetLocation')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('OnPremGatewayName'))]"
@@ -595,7 +615,7 @@
         "fqdn": "[reference(variables('AzureGatewayPipId'),'2020-06-01').dnsSettings.fqdn]",
         "bgpSettings": {
           "asn": 65002,
-          "bgpPeeringAddress": "10.10.10.4",
+          "bgpPeeringAddress": "10.10.10.254",
           "peerWeight": 0
         }
       }
