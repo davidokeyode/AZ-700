@@ -127,7 +127,7 @@
   "variables": {
     "Vnet-1-Name": "CoreServicesVnet",
     "Vnet-2-Name": "onprem-network",
-    "Vnet-3-Name": "RemotePcVnet",
+    "Vnet-3-Name": "remotepc-network",
     "GatewaySubnetName": "GatewaySubnet",
     "WebSubnetName": "PublicWebServiceSubnet",
     "DataSubnetName": "DatabaseSubnet",
@@ -289,14 +289,6 @@
             "name": "[variables('WebSubnetName')]",
             "properties": {
               "addressPrefix": "[variables('WebSubnetAddressPrefix')]",
-              "privateEndpointNetworkPolicies": "Enabled",
-              "privateLinkServiceNetworkPolicies": "Enabled"
-            }
-          },
-          {
-            "name": "[variables('GatewaySubnetName')]",
-            "properties": {
-              "addressPrefix": "[variables('AzureGatewaySubnetAddressPrefix')]",
               "privateEndpointNetworkPolicies": "Enabled",
               "privateLinkServiceNetworkPolicies": "Enabled"
             }
