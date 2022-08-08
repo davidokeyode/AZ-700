@@ -377,7 +377,7 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-05-01",
       "name": "[variables('AzureGatewayPip')]",
-      "location": "[parameters('secondVnetLocation')]",
+      "location": "[parameters('firstVnetLocation')]",
       "sku": {
         "name": "Standard"
       },
