@@ -246,7 +246,7 @@
       "type": "Microsoft.Network/networkSecurityGroups",
       "apiVersion": "2021-05-01",
       "name": "[variables('RemotePcNSG')]",
-      "location": "[parameters('firstVnetLocation')]",
+      "location": "[parameters('secondVnetLocation')]",
       "properties": {
         "securityRules": [
           {
@@ -577,7 +577,7 @@
         "vpnType": "RouteBased",
         "enableBgp": true,
         "activeActive": false,
-        "vpnGatewayGeneration": "Generation2",
+        "vpnGatewayGeneration": "Generation1",
         "bgpSettings": {
           "asn": 65001
         }
