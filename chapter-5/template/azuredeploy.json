@@ -44,10 +44,17 @@
         "description": "Username for the Virtual Machine."
       }
     },
-    "Password": {
+    "VmPassword": {
       "type": "secureString",
       "metadata": {
         "description": "Password for the Virtual Machine"
+      }
+    },
+    "IpsecSharedKey": {
+      "type": "secureString",
+      "defaultValue": "vpnPass123",
+      "metadata": {
+        "description": "SharedKey for the IPSEC connection"
       }
     },
     "ubuntuOSVersion": {
@@ -450,7 +457,7 @@
         "osProfile": {
           "computerName": "[parameters('OnPremVmName')]",
           "adminUsername": "[parameters('onpremUsername')]",
-          "adminPassword": "[parameters('Password')]"
+          "adminPassword": "[parameters('VmPassword')]"
         }
       },
       "dependsOn": [
@@ -490,7 +497,7 @@
         "osProfile": {
           "computerName": "[parameters('DataVmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('Password')]"
+          "adminPassword": "[parameters('VmPassword')]"
         }
       },
       "dependsOn": [
@@ -530,7 +537,7 @@
         "osProfile": {
           "computerName": "[parameters('RemotePcName')]",
           "adminUsername": "[parameters('remoteUsername')]",
-          "adminPassword": "[parameters('Password')]"
+          "adminPassword": "[parameters('VmPassword')]"
         }
       },
       "dependsOn": [
@@ -612,7 +619,7 @@
         },
         "connectionType": "IPsec",
         "routingWeight": 0,
-        "sharedKey": "[parameters('Password')]",
+        "sharedKey": "[parameters('IpsecSharedKey')]",
         "enableBGP": true
       }
     }
