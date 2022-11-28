@@ -217,7 +217,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2021-05-01",
       "name": "[variables('RemotePcNic')]",
-      "location": "[parameters('secondVnetLocation')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -247,7 +247,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2021-05-01",
       "name": "[variables('OnPremVmNic')]",
-      "location": "[parameters('secondVnetLocation')]",
+      "location": "[parameters('firstVnetLocation')]",
       "properties": {
         "ipConfigurations": [
           {
