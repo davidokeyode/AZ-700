@@ -715,6 +715,26 @@
     "sshCommand": {
       "type": "string",
       "value": "[format('ssh {0}@{1}', parameters('adminUsername'), reference(resourceId('Microsoft.Network/publicIPAddresses', variables('WebVmPip'))).dnsSettings.fqdn)]"
+    },
+    "RemotePC-FQDN": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('RemotePcPip'))).dnsSettings.fqdn]"
+    },
+    "RemotePC-Username": {
+      "type": "string",
+      "value": "[parameters('remoteUsername')]"
+    },
+    "OnPremVPNDevice-FQDN": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('OnPremGatewayPip'))).dnsSettings.fqdn]"
+    },
+    "OnPremVPNDevice-BGP-ASN": {
+      "type": "string",
+      "value": "65001"
+    },
+    "OnPremVPNDevice-BGP-PeerIP": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Network/virtualNetworkGateways', variables('OnPremGatewayName'))).bgpSettings.bgpPeeringAddress]"
     }
   }
 }
