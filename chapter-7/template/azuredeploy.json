@@ -566,8 +566,8 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "InstallVpnCert",
-      "apiVersion": "2015-05-01-preview",
+      "name": "[concat(parameters('RemotePcName'),'/InstallVpnCert')]",
+      "apiVersion": "2018-06-01",
       "location": "[parameters('firstVnetLocation')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/',parameters('RemotePcName'))]"
@@ -575,7 +575,7 @@
       "properties": {
         "publisher": "Microsoft.Compute",
         "type": "CustomScriptExtension",
-        "typeHandlerVersion": "1.4",
+        "typeHandlerVersion": "1.10",
         "settings": {
           "fileUris": [
             "[uri(variables('_artifactsLocation'), concat('vpncert.ps1', variables('_artifactsLocationSasToken')))]"
