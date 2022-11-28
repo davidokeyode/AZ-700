@@ -567,9 +567,9 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "MyCustomScriptExtension",
+      "name": "InstallVpnCert",
       "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('secondVnetLocation')]",
+      "location": "[parameters('firstVnetLocation')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/',parameters('RemotePcName'))]"
       ],
