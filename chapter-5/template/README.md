@@ -15,6 +15,7 @@
   * OnPremVM (10.50.1.4)
 * **onprem-subnet-2 (10.50.2.0/24)**
 * **onprem-subnet-3 (10.50.3.0/24)**
+* **GatewaySubnet (10.50.10.0/24)**
 
 ## Remote User PC
 * 
