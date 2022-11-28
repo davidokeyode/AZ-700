@@ -180,8 +180,7 @@
     "webNSG": "WebVmNsg",
     "osDiskType": "Standard_LRS",
     "_artifactsLocation": "[deployment().properties.templateLink.uri]",
-    "_artifactsLocationSasToken": "",
-    "scriptUrl": "[uri(variables('_artifactsLocation'),concat('installscript.ps1',variables('_artifactsLocationSasToken')))]"
+    "_artifactsLocationSasToken": ""
   },
   "resources": [
     {
