@@ -30,7 +30,7 @@
         },
         "localGatewayBgpASN": {
             "type": "int",
-            "defaultValue": "65515",
+            "defaultValue": 65515,
             "metadata": {
                 "description": "BGP ASN of the VWAN hub S2S VPN gateway resource"
             }
