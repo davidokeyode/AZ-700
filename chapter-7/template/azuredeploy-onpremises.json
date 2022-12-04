@@ -105,7 +105,6 @@
             "name": "[variables('connection1Name')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('OnPremGatewayName'))]",
                 "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localGateway0Name'))]"
             ],
             "properties": {
@@ -128,7 +127,6 @@
             "name": "[variables('connection2Name')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('OnPremGatewayName'))]",
                 "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localGateway1Name'))]"
             ],
             "properties": {
