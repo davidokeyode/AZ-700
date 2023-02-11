@@ -29,6 +29,13 @@
         "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
       }
     },
+    "storageAccountName": {
+      "type": "string",
+      "defaultValue": "[toLower(concat('logstore', uniqueString(resourceGroup().id)))]",
+      "metadata": {
+        "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
+      }
+    },
     "ubuntuOSVersion": {
       "type": "string",
       "defaultValue": "18.04-LTS",
@@ -221,7 +228,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2022-05-01",
-      "name": "[variables('storageAccountName')]",
+      "name": "[parameters('storageAccountName')]",
       "location": "[parameters('firstVnetLocation')]",
       "sku": {
         "name": "Standard_LRS"
@@ -234,9 +241,9 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2022-05-01",
-      "name": "[format('{0}/default/{1}', variables('storageAccountName'), variables('containerName'))]",
+      "name": "[format('{0}/default/{1}', parameters('storageAccountName'), variables('containerName'))]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
     }
   ],
