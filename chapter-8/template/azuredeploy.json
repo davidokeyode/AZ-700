@@ -76,8 +76,6 @@
     "WebVmPip": "[format('{0}PublicIP', parameters('WebVmName'))]",
     "WebVmNic": "[format('{0}NetInt', parameters('WebVmName'))]",
     "osDiskType": "Standard_LRS",
-    "_artifactsLocation": "[deployment().properties.templateLink.uri]",
-    "_artifactsLocationSasToken": "",
     "storageAccountName": "[toLower(concat('logstore', uniqueString(resourceGroup().id)))]",
     "containerName": "ddoslogs"
   },
@@ -219,7 +217,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "[uri(variables('_artifactsLocation'), concat('install_nginx.sh', variables('_artifactsLocationSasToken')))]"
+            "[uri(deployment().properties.templateLink.uri, concat('install_nginx.sh'))]"
           ],
           "commandToExecute": "sh install_nginx.sh"
         }
