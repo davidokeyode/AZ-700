@@ -9,27 +9,6 @@
         "description": "The name of the web virtual machine."
       }
     },
-    "DataVmName": {
-      "type": "string",
-      "defaultValue": "datavm",
-      "metadata": {
-        "description": "The name of the data virtual machine."
-      }
-    },
-    "EngVmName": {
-      "type": "string",
-      "defaultValue": "engvm",
-      "metadata": {
-        "description": "The name of the engineering virtual machine."
-      }
-    },
-    "DnsVmName": {
-      "type": "string",
-      "defaultValue": "dnsvm",
-      "metadata": {
-        "description": "The name of the DNS virtual machine."
-      }
-    },
     "adminUsername": {
       "type": "string",
       "defaultValue": "azureuser",
@@ -76,61 +55,19 @@
       "metadata": {
         "description": "Location to deploy the CoreServices VNet into"
       }
-    },
-    "secondVnetLocation": {
-      "type": "string",
-      "defaultValue": "West US",
-      "allowedValues": [
-        "East US",
-        "East US 2",
-        "South Central US",
-        "Central US",
-        "West US",
-        "Australia East",
-        "Southeast Asia",
-        "North Europe",
-        "West Europe",
-        "UK South",
-        "UK West",
-        "South Central US",
-        "South Africa North",
-        "Central India",
-        "East Asia",
-        "Japan East",
-        "Korea South",
-        "South India",
-        "West India",
-        "France South",
-        "Germany North",
-        "Central India",
-        "Norway West",
-        "UAE Central"
-      ],
-      "metadata": {
-        "description": "Location to deploy the Engineering VNet into"
-      }
     }
   },
   "variables": {
     "Vnet-1-Name": "CoreServicesVnet",
-    "Vnet-2-Name": "EngineeringVnet",
     "SharedSvcSubnetName": "SharedServicesSubnet",
     "WebSubnetName": "PublicWebServiceSubnet",
     "DataSubnetName": "DatabaseSubnet",
-    "EngSubnet1Name": "EngSubnet1",
-    "EngSubnet2Name": "EngSubnet2",
     "Vnet-1-AddressPrefix": "10.10.0.0/16",
     "SharedSvcSubnetAddressPrefix": "10.10.1.0/24",
     "dataSubnetAddressPrefix": "10.10.2.0/24",
     "webSubnetAddressPrefix": "10.10.3.0/24",
-    "Vnet-2-AddressPrefix": "10.20.0.0/16",
-    "EngSubnet1AddressPrefix": "10.20.1.0/24",
-    "EngSubnet2AddressPrefix": "10.20.2.0/24",
     "WebVmPip": "[format('{0}PublicIP', parameters('WebVmName'))]",
     "WebVmNic": "[format('{0}NetInt', parameters('WebVmName'))]",
-    "DataVmNic": "[format('{0}NetInt', parameters('dataVmName'))]",
-    "DnsVmNic": "[format('{0}NetInt', parameters('DnsVmName'))]",
-    "EngVmNic": "[format('{0}NetInt', parameters('EngVmName'))]",
     "webNSG": "WebVmNsg",
     "osDiskType": "Standard_LRS",
     "_artifactsLocation": "[deployment().properties.templateLink.uri]",
