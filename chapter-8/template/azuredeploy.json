@@ -94,10 +94,7 @@
               }
             }
           }
-        ],
-        "networkSecurityGroup": {
-          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('webNSG'))]"
-        }
+        ]
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/publicIPAddresses', variables('WebVmPip'))]",
