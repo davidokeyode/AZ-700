@@ -254,6 +254,10 @@
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('WebVmPip'))).dnsSettings.fqdn]"
     },
+    "SubscriptionId": {
+      "type": "string",
+      "value": "[subscription().subscriptionId]"
+    },
     "sshCommand": {
       "type": "string",
       "value": "[format('ssh {0}@{1}', parameters('adminUsername'), reference(resourceId('Microsoft.Network/publicIPAddresses', variables('WebVmPip'))).dnsSettings.fqdn)]"
