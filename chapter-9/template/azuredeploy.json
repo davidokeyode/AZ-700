@@ -2,13 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "projectName": {
-      "type": "string",
-      "metadata": {
-        "description": "Specifies a project name that is used for generating resource names."
-      }
-    },
-    "location-cr": {
+    "firstRegion": {
       "type": "string",
       "allowedValues": [
         "eastus2",
@@ -17,33 +11,11 @@
         "southeastasia",
         "centralus",
         "northeurope",
-        "eastasia"
+        "eastasia",
+        "uksouth"
       ],
       "metadata": {
-        "description": "Specifies the location for the cross-region load balancer.  Available in limited regions."
-      }
-    },
-    "firstRegion": {
-      "type": "string",
-      "allowedValues": [
-        "canadacentral",
-        "centralus",
-        "eastus",
-        "eastus2",
-        "southcentralus",
-        "westus2",
-        "francecentral",
-        "germanywestcentral",
-        "northeurope",
-        "uksouth",
-        "westeurope",
-        "southafricanorth",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
-      ],
-      "metadata": {
-        "description": "Specifies the location to use as the first region"
+        "description": "Specifies the location to use for the cross-region load balancer and the first regional load balancer"
       }
     },
     "secondRegion": {
@@ -91,53 +63,49 @@
     }
   },
   "variables": {
+    "projectName": "charistech",
     "publicIPAddressType": "Static",
     "lbSkuName": "Standard",
     "vmStorageAccountType": "Premium_LRS",
-    "lbName-r1": "[concat(parameters('projectName'),'-lb-r1')]",
-    "lbPublicIpAddressName-r1": "[concat(parameters('projectName'),'-lbPublicIP-r1')]",
-    "lbPublicIPAddressNameOutbound-r1": "[concat(parameters('projectName'),'-lbPublicIPOutbound-r1')]",
+    "lbName-r1": "[concat(variables('projectName'),'-lb-r1')]",
+    "lbPublicIpAddressName-r1": "[concat(variables('projectName'),'-lbPublicIP-r1')]",
+    "lbPublicIPAddressNameOutbound-r1": "[concat(variables('projectName'),'-lbPublicIPOutbound-r1')]",
     "lbFrontEndName-r1": "LoadBalancerFrontEnd-r1",
     "lbFrontEndNameOutbound-r1": "LoadBalancerFrontEndOutbound-r1",
     "lbBackendPoolName-r1": "LoadBalancerBackEndPool-r1",
     "lbBackendPoolNameOutbound-r1": "LoadBalancerBackEndPoolOutbound-r1",
     "lbProbeName-r1": "loadBalancerHealthProbe-r1",
-    "nsgName-r1": "[concat(parameters('projectName'),'-nsg-r1')]",
-    "vNetName-r1": "[concat(parameters('projectName'),'-vnet-r1')]",
+    "nsgName-r1": "[concat(variables('projectName'),'-nsg-r1')]",
+    "vNetName-r1": "[concat(variables('projectName'),'-vnet-r1')]",
     "vNetAddressPrefix-r1": "10.0.0.0/16",
     "vNetSubnetName-r1": "BackendSubnet-r1",
     "AppGwSubnetName-r1": "AppGwSubnet",
     "vNetSubnetAddressPrefix-r1": "10.0.0.0/24",
-    "AppGwSubnetAddressPrefix-r1": "10.10.0.0/24",
-    "bastionName-r1": "[concat(parameters('projectName'),'-bastion-r1')]",
+    "AppGwSubnetAddressPrefix-r1": "10.0.10.0/24",
+    "bastionName-r1": "[concat(variables('projectName'),'-bastion-r1')]",
     "bastionSubnetName-r1": "AzureBastionSubnet",
     "vNetBastionSubnetAddressPrefix-r1": "10.0.1.0/24",
-    "bastionPublicIPAddressName-r1": "[concat(parameters('projectName'),'-bastionPublicIP-r1')]",
+    "bastionPublicIPAddressName-r1": "[concat(variables('projectName'),'-bastionPublicIP-r1')]",
 
-    "lbName-r2": "[concat(parameters('projectName'),'-lb-r2')]",
-    "lbPublicIpAddressName-r2": "[concat(parameters('projectName'),'-lbPublicIP-r2')]",
-    "lbPublicIPAddressNameOutbound-r2": "[concat(parameters('projectName'),'-lbPublicIPOutbound-r2')]",
+    "lbName-r2": "[concat(variables('projectName'),'-lb-r2')]",
+    "lbPublicIpAddressName-r2": "[concat(variables('projectName'),'-lbPublicIP-r2')]",
+    "lbPublicIPAddressNameOutbound-r2": "[concat(variables('projectName'),'-lbPublicIPOutbound-r2')]",
     "lbFrontEndName-r2": "LoadBalancerFrontEnd-r2",
     "lbFrontEndNameOutbound-r2": "LoadBalancerFrontEndOutbound-r2",
     "lbBackendPoolName-r2": "LoadBalancerBackEndPool-r2",
     "lbBackendPoolNameOutbound-r2": "LoadBalancerBackEndPoolOutbound-r2",
     "lbProbeName-r2": "loadBalancerHealthProbe-r2",
-    "nsgName-r2": "[concat(parameters('projectName'),'-nsg-r2')]",
-    "vNetName-r2": "[concat(parameters('projectName'),'-vnet-r2')]",
+    "nsgName-r2": "[concat(variables('projectName'),'-nsg-r2')]",
+    "vNetName-r2": "[concat(variables('projectName'),'-vnet-r2')]",
     "vNetAddressPrefix-r2": "11.0.0.0/16",
     "vNetSubnetName-r2": "BackendSubnet-r2",
     "vNetSubnetAddressPrefix-r2": "11.0.0.0/24",
-    "bastionName-r2": "[concat(parameters('projectName'),'-bastion-r2')]",
+    "bastionName-r2": "[concat(variables('projectName'),'-bastion-r2')]",
     "bastionSubnetName-r2": "AzureBastionSubnet",
     "vNetBastionSubnetAddressPrefix-r2": "11.0.1.0/24",
-    "bastionPublicIPAddressName-r2": "[concat(parameters('projectName'),'-bastionPublicIP-r2')]",
+    "bastionPublicIPAddressName-r2": "[concat(variables('projectName'),'-bastionPublicIP-r2')]",
 
-    "lbName-cr": "[concat(parameters('projectName'),'-lb','-cr')]",
-    "lbBackendPoolName-cr": "LoadBalancerBackEndPool-cr",
-    "lbPublicIpAddressName-cr": "[concat(parameters('projectName'),'-lbPublicIP','-cr')]",
-    "lbFrontEndName-cr": "LoadBalancerFrontEnd-cr",
-    "lbProbeName-cr": "LoadBalancerHealthProbe-cr"
-
+    "lbPublicIpAddressName-cr": "[concat(variables('projectName'),'-lbPublicIP','-cr')]"
   },
   "resources": [
     {
@@ -284,8 +252,7 @@
       "location": "[parameters('firstRegion')]",
       "name": "[concat(variables('vNetName-r1'), '/' ,variables('AppGwSubnetName-r1'))]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName-r1'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vNetName-r1'), variables('bastionSubnetName-r1'))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName-r1'))]"
       ],
       "properties": {
         "addressPrefix": "[variables('AppGwSubnetAddressPrefix-r1')]"
@@ -829,7 +796,7 @@
       "apiVersion": "2020-07-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('lbPublicIpAddressName-cr')]",
-      "location": "[parameters('location-cr')]",
+      "location": "[parameters('firstRegion')]",
       "sku": {
         "name": "Standard",
         "tier": "Global"
