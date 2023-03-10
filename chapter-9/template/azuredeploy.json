@@ -58,7 +58,7 @@
       "type": "string",
       "defaultValue": "Standard_D2s_v3",
       "metadata": {
-        "description": "Size of the virtual machine"
+        "description": "Size of the virtual machines"
       }
     }
   },
@@ -115,7 +115,7 @@
       "location": "[parameters('firstRegion')]",
       "copy": {
         "name": "networkInterfaceCopy",
-        "count": 3
+        "count": 2
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName-r1'))]",
@@ -155,7 +155,7 @@
       "location": "[parameters('firstRegion')]",
       "copy": {
         "name": "extensionCopy",
-        "count": 3
+        "count": 2
       },
       "dependsOn": [
         "vmCopy"
@@ -180,7 +180,7 @@
       ],
       "copy": {
         "name": "vmCopy",
-        "count": 3
+        "count": 2
       },
       "dependsOn": [
         "networkInterfaceCopy"
@@ -463,7 +463,7 @@
       "location": "[parameters('secondRegion')]",
       "copy": {
         "name": "networkInterfaceCopy",
-        "count": 3
+        "count": 2
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName-r2'))]",
@@ -503,7 +503,7 @@
       "location": "[parameters('secondRegion')]",
       "copy": {
         "name": "extensionCopy",
-        "count": 3
+        "count": 2
       },
       "dependsOn": [
         "vmCopy"
@@ -528,7 +528,7 @@
       ],
       "copy": {
         "name": "vmCopy",
-        "count": 3
+        "count": 2
       },
       "dependsOn": [
         "networkInterfaceCopy"
