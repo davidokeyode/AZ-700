@@ -5,7 +5,9 @@
 
 
 ## What will be created
-* **Two regional load balancers in regions of your choosing**
+* **Two regional load balancers in two regions of your choosing**
+* Four web servers split across the two regions
+* 
   * WebVM (10.10.3.4)
  
 ## EngineeringVNet (10.20.0.0/16)
