@@ -69,7 +69,7 @@
     "appPlanName-r2": "app-plan-r2",
     "appServicePlanSkuName": "S1",
     "appServicePlanCapacity": 1,
-    "repoURL": "https://github.com/Azure-Samples/app-service-web-html-get-started.git",
+    "repoURL": "https://github.com/azure-appservice-samples/AwesomeWebApp.git",
     "branch": "master",
     "projectName": "charistech",
     "publicIPAddressType": "Static",
