@@ -63,6 +63,14 @@
     }
   },
   "variables": {
+    "appName-r1": "[concat('webapp-r1-', uniqueString(resourceGroup().id))]",
+    "appName-r2": "[concat('webapp-r2-', uniqueString(resourceGroup().id))]",
+    "appPlanName-r1": "app-plan-r1",
+    "appPlanName-r2": "app-plan-r2",
+    "appServicePlanSkuName": "S1",
+    "appServicePlanCapacity": 1,
+    "repoURL": "https://github.com/Azure-Samples/app-service-web-html-get-started.git",
+    "branch": "master",
     "projectName": "charistech",
     "publicIPAddressType": "Static",
     "lbSkuName": "Standard",
@@ -108,6 +116,88 @@
     "lbPublicIpAddressName-cr": "[concat(variables('projectName'),'-lbPublicIP','-cr')]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2020-12-01",
+      "name": "[variables('appPlanName-r1')]",
+      "location": "[parameters('firstRegion')]",
+      "sku": {
+        "name": "[variables('appServicePlanSkuName')]",
+        "capacity": "[variables('appServicePlanCapacity')]"
+      },
+      "properties": {
+        "name": "[variables('appPlanName-r1')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2020-12-01",
+      "name": "[variables('appPlanName-r2')]",
+      "location": "[parameters('secondRegion')]",
+      "sku": {
+        "name": "[variables('appServicePlanSkuName')]",
+        "capacity": "[variables('appServicePlanCapacity')]"
+      },
+      "properties": {
+        "name": "[variables('appPlanName-r2')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2020-12-01",
+      "name": "[variables('appName-r1')]",
+      "location": "[parameters('firstRegion')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appPlanName-r1'))]"
+      ],
+      "properties": {
+        "id": "[resourceId('Microsoft.Web/serverfarms', variables('appPlanName-r1'))]"
+      },
+      "resources": [
+        {
+          "type": "sourcecontrols",
+          "apiVersion": "2020-12-01",
+          "name": "web",
+          "location": "[parameters('firstRegion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('appName-r1'))]"
+          ],
+          "properties": {
+            "repoUrl": "[variables('repoURL')]",
+            "branch": "[variables('branch')]",
+            "isManualIntegration": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2020-12-01",
+      "name": "[variables('appName-r2')]",
+      "location": "[parameters('secondRegion')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appPlanName-r2'))]"
+      ],
+      "properties": {
+        "id": "[resourceId('Microsoft.Web/serverfarms', variables('appPlanName-r2'))]"
+      },
+      "resources": [
+        {
+          "type": "sourcecontrols",
+          "apiVersion": "2020-12-01",
+          "name": "web",
+          "location": "[parameters('secondRegion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('appName-r2'))]"
+          ],
+          "properties": {
+            "repoUrl": "[variables('repoURL')]",
+            "branch": "[variables('branch')]",
+            "isManualIntegration": true
+          }
+        }
+      ]
+    },
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2020-06-01",
