@@ -50,7 +50,7 @@
         "bastionHostName": "bastion",
         "vmSubnetName": "PublicWebServiceSubnet",
         "virtualNetworkName": "CoreServicesVnet",
-        "storageAccountName": "[format('storage{0}', uniqueString(resourceGroup().id))]",
+        "storageAccountName": "[format('az700store{0}', uniqueString(resourceGroup().id))]",
         "fileShareName": "appdatashare",
         "networkSecurityGroupName": "PublicWebServiceSubnet-SG"
     },
