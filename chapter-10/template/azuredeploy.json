@@ -35,14 +35,6 @@
             "metadata": {
                 "description": "Location for all resources."
             }
-        },
-        "networkSecurityGroupName": {
-            "type": "string",
-            "defaultValue": "SecGroupNet",
-            "metadata": {
-                "description": "Name of the Network Security Group"
-            }
-
         }
     },
     "variables": {
