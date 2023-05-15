@@ -54,7 +54,7 @@
         "fileShareName": "appdatashare",
         "networkSecurityGroupName": "PublicWebServiceSubnet-SG",
         "siteName": "[concat('az700webapp-', uniqueString(resourceGroup().id))]",
-        "sku": "B1",
+        "sku": "P1v2",
         "workerSize": "1",
         "repoURL": "https://github.com/Azure-Samples/app-service-web-html-get-started.git",
         "branch": "master",
