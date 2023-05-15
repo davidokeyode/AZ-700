@@ -52,7 +52,14 @@
         "virtualNetworkName": "CoreServicesVnet",
         "storageAccountName": "[format('az700store{0}', uniqueString(resourceGroup().id))]",
         "fileShareName": "appdatashare",
-        "networkSecurityGroupName": "PublicWebServiceSubnet-SG"
+        "networkSecurityGroupName": "PublicWebServiceSubnet-SG",
+        "siteName": "[concat('az700webapp-', uniqueString(resourceGroup().id))]",
+        "sku": "S1",
+        "workerSize": "1",
+        "repoURL": "https://github.com/Azure-Samples/app-service-web-html-get-started.git",
+        "branch": "master",
+        "hostingPlanName": "az700webapp-plan"
+
     },
     "resources": [
         {
@@ -237,7 +244,49 @@
             "dependsOn": [
               "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ]
-          }
+          },
+          {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-12-01",
+            "name": "[variables('hostingPlanName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[variables('sku')]",
+                "capacity": "[variables('workerSize')]"
+            },
+            "properties": {
+                "name": "[variables('hostingPlanName')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2020-12-01",
+            "name": "[variables('siteName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+                "id": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+            },
+            "resources": [
+                {
+                    "type": "sourcecontrols",
+                    "apiVersion": "2020-12-01",
+                    "name": "web",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', variables('siteName'))]"
+                    ],
+                    "properties": {
+                        "repoUrl": "[variables('repoURL')]",
+                        "branch": "[variables('branch')]",
+                        "isManualIntegration": true
+                    }
+                }
+            ]
+        }
+
 
     ],
     "outputs": {
