@@ -290,9 +290,9 @@
 
     ],
     "outputs": {
-        "adminUsername": {
+        "webappName": {
             "type": "string",
-            "value": "[parameters('adminUsername')]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', variables('siteName')), '2020-12-01').properties.name]"
         }
     }
 }
