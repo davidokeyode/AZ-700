@@ -51,7 +51,8 @@
         "vmSubnetName": "PublicWebServiceSubnet",
         "virtualNetworkName": "CoreServicesVnet",
         "storageAccountName": "[format('storage{0}', uniqueString(resourceGroup().id))]",
-        "fileShareName": "appdatashare"
+        "fileShareName": "appdatashare",
+        "networkSecurityGroupName": "PublicWebServiceSubnet-SG"
     },
     "resources": [
         {
@@ -60,7 +61,7 @@
             "apiVersion": "2020-05-01",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
                 "[resourceId('Microsoft.Network/publicIpAddresses/', variables('publicIpAddressName'))]"
             ],
@@ -77,12 +78,12 @@
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('networkSecurityGroupName'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('networkSecurityGroupName'))]"
                 }
             }
         },
         {
-            "name": "[parameters('networkSecurityGroupName')]",
+            "name": "[variables('networkSecurityGroupName')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
             "location": "[parameters('location')]",
