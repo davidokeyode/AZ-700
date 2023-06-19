@@ -50,7 +50,7 @@
         "bastionHostName": "bastion",
         "vmSubnetName": "PublicWebServiceSubnet",
         "virtualNetworkName": "CoreServicesVnet",
-        "storageAccountName": "[format('az700flowlogs{0}', uniqueString(resourceGroup().id))]",
+        "storageAccountName": "[format('flowlogs{0}', uniqueString(resourceGroup().id))]",
         "networkSecurityGroupName": "PublicWebServiceSubnet-SG",
         "siteName": "[concat('az700webapp-', uniqueString(resourceGroup().id))]"
 
