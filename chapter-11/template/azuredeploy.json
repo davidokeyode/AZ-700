@@ -51,8 +51,7 @@
         "vmSubnetName": "PublicWebServiceSubnet",
         "virtualNetworkName": "CoreServicesVnet",
         "storageAccountName": "[format('flowlogs{0}', uniqueString(resourceGroup().id))]",
-        "networkSecurityGroupName": "PublicWebServiceSubnet-SG",
-        "siteName": "[concat('az700webapp-', uniqueString(resourceGroup().id))]"
+        "networkSecurityGroupName": "PublicWebServiceSubnet-SG"
 
     },
     "resources": [
@@ -233,9 +232,6 @@
           }
     ],
     "outputs": {
-        "webappName": {
-            "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', variables('siteName')), '2020-12-01').properties.name]"
-        }
+
     }
 }
