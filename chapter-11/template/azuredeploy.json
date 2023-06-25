@@ -261,9 +261,9 @@
                   }
                 },
                 "imageReference": {
-                  "publisher": "Canonical",
-                  "offer": "UbuntuServer",
-                  "sku": "[parameters('ubuntuOSVersion')]",
+                  "publisher": "canonical",
+                  "offer": "0001-com-ubuntu-minimal-lunar",
+                  "sku": "minimal-23_04",
                   "version": "latest"
                 }
               },
