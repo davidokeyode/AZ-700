@@ -2,13 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vmName": {
-            "type": "string",
-            "defaultValue": "webvm",
-            "metadata": {
-                "description": "The name of you Virtual Machine."
-            }
-        },
         "VmSize": {
             "type": "string",
             "defaultValue": "Standard_B2s",
@@ -38,10 +31,15 @@
         }
     },
     "variables": {
+        "webvmName": "webvm",
+        "dataVmName": "datavm",
         "publicIpAddressName": "[format('{0}-pip', variables('bastionHostName'))]",
-        "networkInterfaceName": "[concat(parameters('vmName'),'NetInt')]",
+        "networkInterfaceName": "[concat(variables('webvmName'),'NetInt')]",
         "vmSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('vmSubnetName'))]",
         "bastionSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('bastionSubnetName'))]",
+        "DataSubnetName": "DatabaseSubnet",
+        "DataVmNic": "[format('{0}NetInt', parameters('dataVmName'))]",
+        "dataSubnetAddressPrefix": "10.10.2.0/24",
         "osDiskType": "StandardSSD_LRS",
         "vmSubnetAddressPrefix": "10.10.3.0/24",
         "bastionSubnetName": "AzureBastionSubnet",
@@ -149,7 +147,7 @@
             }
         },
         {
-            "name": "[parameters('vmName')]",
+            "name": "[variables('webvmName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-12-01",
             "location": "[parameters('location')]",
@@ -182,7 +180,7 @@
                     ]
                 },
                 "osProfile": {
-                    "computerName": "[parameters('vmName')]",
+                    "computerName": "[variables('webvmName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
@@ -192,6 +190,46 @@
                 }
             }
         },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2021-11-01",
+            "name": "[variables('dataVmName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+              "hardwareProfile": {
+                "vmSize": "[parameters('vmSize')]"
+              },
+              "storageProfile": {
+                "osDisk": {
+                  "createOption": "FromImage",
+                  "managedDisk": {
+                    "storageAccountType": "[variables('osDiskType')]"
+                  }
+                },
+                "imageReference": {
+                  "publisher": "Canonical",
+                  "offer": "UbuntuServer",
+                  "sku": "[parameters('ubuntuOSVersion')]",
+                  "version": "latest"
+                }
+              },
+              "networkProfile": {
+                "networkInterfaces": [
+                  {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('DataVmNic'))]"
+                  }
+                ]
+              },
+              "osProfile": {
+                "computerName": "[variables('dataVmName')]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPassword')]"
+              }
+            },
+            "dependsOn": [
+              "[resourceId('Microsoft.Network/networkInterfaces', variables('DataVmNic'))]"
+            ]
+          },
         {
             "type": "Microsoft.Network/bastionHosts",
             "apiVersion": "2020-05-01",
