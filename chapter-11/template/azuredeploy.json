@@ -33,35 +33,34 @@
     "variables": {
         "webvmName": "webvm",
         "dataVmName": "datavm",
-        "publicIpAddressName": "[format('{0}-pip', variables('bastionHostName'))]",
-        "networkInterfaceName": "[concat(variables('webvmName'),'NetInt')]",
-        "vmSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('vmSubnetName'))]",
-        "bastionSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('bastionSubnetName'))]",
-        "DataSubnetName": "DatabaseSubnet",
-        "DataVmNic": "[format('{0}NetInt', parameters('dataVmName'))]",
-        "dataSubnetAddressPrefix": "10.10.2.0/24",
-        "osDiskType": "StandardSSD_LRS",
-        "vmSubnetAddressPrefix": "10.10.3.0/24",
-        "bastionSubnetName": "AzureBastionSubnet",
-        "bastionSubnetAddressPrefix": "10.10.1.0/24",
-        "addressPrefix": "10.10.0.0/16",
         "bastionHostName": "bastion",
-        "vmSubnetName": "PublicWebServiceSubnet",
+        "publicIpAddressName": "[format('{0}-pip', variables('bastionHostName'))]",
+        "WebVmNic": "[concat(variables('webvmName'),'NetInt')]",
+        "DataVmNic": "[concat(variables('datavmName'),'NetInt')]",
+        "bastionSubnetName": "AzureBastionSubnet",
+        "dataSubnetName": "DatabaseSubnet",
+        "webSubnetName": "PublicWebServiceSubnet",
+        "webSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('webSubnetName'))]",
+        "bastionSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('bastionSubnetName'))]",
+        "dataSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('dataSubnetName'))]",
+        "osDiskType": "StandardSSD_LRS",
+        "bastionSubnetAddressPrefix": "10.10.1.0/24",
+        "dataSubnetAddressPrefix": "10.10.2.0/24",
+        "WebSubnetAddressPrefix": "10.10.3.0/24",
         "virtualNetworkName": "CoreServicesVnet",
         "storageAccountName": "[format('flowlogs{0}', uniqueString(resourceGroup().id))]",
-        "networkSecurityGroupName": "PublicWebServiceSubnet-SG"
-
+        "webNSG": "PublicWebServiceSubnet-SG",
+        "dataNSG": "DatabaseSubnet-SG"
     },
     "resources": [
         {
-            "name": "[variables('networkInterfaceName')]",
+            "name": "[variables('WebVmNic')]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-05-01",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-                "[resourceId('Microsoft.Network/publicIpAddresses/', variables('publicIpAddressName'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('webNSG'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -69,19 +68,45 @@
                         "name": "ipconfig1",
                         "properties": {
                             "subnet": {
-                                "id": "[variables('vmSubnetRef')]"
+                                "id": "[variables('webSubnetRef')]"
                             },
                             "privateIPAllocationMethod": "Dynamic"
                         }
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('networkSecurityGroupName'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('webNSG'))]"
                 }
             }
         },
         {
-            "name": "[variables('networkSecurityGroupName')]",
+            "name": "[variables('DataVmNic')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2020-05-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('dataNSG'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('webSubnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic"
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('dataNSG'))]"
+                }
+            }
+        },
+        {
+            "name": "[variables('webNSG')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
             "location": "[parameters('location')]",
@@ -93,6 +118,29 @@
                             "protocol": "TCP",
                             "sourcePortRange": "*",
                             "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 300,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('dataNSG')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
@@ -116,9 +164,9 @@
                 },
                 "subnets": [
                     {
-                        "name": "[variables('vmSubnetName')]",
+                        "name": "[variables('webSubnetName')]",
                         "properties": {
-                            "addressPrefix": "[variables('vmSubnetAddressPrefix')]",
+                            "addressPrefix": "[variables('WebSubnetAddressPrefix')]",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
                         }
@@ -127,6 +175,12 @@
                         "name": "[variables('bastionSubnetName')]",
                         "properties": {
                             "addressPrefix": "[variables('bastionSubnetAddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('DataSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[variables('DataSubnetAddressPrefix')]"
                         }
                     }
                 ],
@@ -152,7 +206,7 @@
             "apiVersion": "2019-12-01",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('WebVmNic'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -175,7 +229,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('WebVmNic'))]"
                         }
                     ]
                 },
