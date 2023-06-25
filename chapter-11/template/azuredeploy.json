@@ -95,7 +95,7 @@
                         "name": "ipconfig1",
                         "properties": {
                             "subnet": {
-                                "id": "[variables('webSubnetRef')]"
+                                "id": "[variables('dataSubnetRef')]"
                             },
                             "privateIPAllocationMethod": "Dynamic"
                         }
