@@ -44,6 +44,7 @@
         "bastionSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('bastionSubnetName'))]",
         "dataSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('dataSubnetName'))]",
         "osDiskType": "StandardSSD_LRS",
+        "addressPrefix": "10.10.0.0/16",
         "bastionSubnetAddressPrefix": "10.10.1.0/24",
         "dataSubnetAddressPrefix": "10.10.2.0/24",
         "WebSubnetAddressPrefix": "10.10.3.0/24",
